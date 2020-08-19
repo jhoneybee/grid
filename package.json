@@ -1,6 +1,6 @@
 {
-  "name": "react-data-grid",
-  "version": "7.0.0-canary.18",
+  "name": "react-data-grid-temp",
+  "version": "7.0.0-canary.20",
   "license": "MIT",
   "description": "Excel-like grid component built with React, with editors, keyboard navigation, copy & paste, and the like",
   "keywords": [
@@ -30,10 +30,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "eslint": "eslint --ext mjs,ts,tsx --max-warnings 0 -f codeframe --cache --color src stories jest tools",
-    "eslint:fix": "npm run eslint -- --fix",
+    "eslint:fix": "yarn run eslint -- --fix",
     "typecheck": "tsc -p tsconfig.all.json",
     "build-storybook": "build-storybook --quiet",
-    "prepublishOnly": "npm install && npm run build",
+    "prepublishOnly": "yarn install && yarn run build",
     "postpublish": "git push --follow-tags origin HEAD"
   },
   "dependencies": {

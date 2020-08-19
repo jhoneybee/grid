@@ -6,6 +6,8 @@ interface Metrics<R, SR> {
   columnWidths: ReadonlyMap<string, number>;
   minColumnWidth: number;
   viewportWidth: number;
+  defaultResizable: boolean;
+  defaultSortable: boolean;
   defaultFormatter: React.ComponentType<FormatterProps<R, SR>>;
 }
 
@@ -57,6 +59,8 @@ export function getColumnMetrics<R, SR>(metrics: Metrics<R, SR>): ColumnMetrics<
       idx,
       width,
       left,
+      sortable: column.resizable ?? metrics.defaultSortable,
+      resizable: column.resizable ?? metrics.defaultResizable,
       formatter: column.formatter ?? metrics.defaultFormatter
     };
     totalWidth += width;
@@ -109,7 +113,7 @@ export function canEdit<R, SR>(column: CalculatedColumn<R, SR>, row: R): boolean
   if (typeof column.editable === 'function') {
     return column.editable(row);
   }
-  return Boolean(column.editor || column.editable);
+  return Boolean(column.editor || column.editor2 || column.editable);
 }
 
 export function getColumnScrollPosition<R, SR>(columns: readonly CalculatedColumn<R, SR>[], idx: number, currentScrollLeft: number, currentClientWidth: number): number {
