@@ -3,5 +3,6 @@
     "source.fixAll": true
   },
   "eslint.enable": true,
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "deepscan.enable": true
 }

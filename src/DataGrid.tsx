@@ -37,9 +37,9 @@ import {
   RowsUpdateEvent,
   SelectRowEvent,
   CommitEvent,
-  SortColumn,
+  SelectedCellProps,
   EditCellProps,
-  SelectedCellProps
+  SortColumn
 } from './types';
 import { CellNavigationMode, SortDirection, UpdateActions } from './enums';
 
@@ -146,6 +146,7 @@ export interface DataGridProps<R, K extends keyof R, SR = unknown> extends Share
   onSelectedCellChange?: (position: Position) => void;
   /** called before cell is set active, returns a boolean to determine whether cell is editable */
   onCheckCellIsEditable?: (event: CheckCellIsEditableEvent<R, SR>) => boolean;
+
   /**
    * Toggles and modes
    */
@@ -272,10 +273,16 @@ function DataGrid<R, K extends keyof R, SR>({
     if (selectedPosition === prevSelectedPosition.current || selectedPosition.mode === 'EDIT' || !isCellWithinBounds(selectedPosition)) return;
     prevSelectedPosition.current = selectedPosition;
     scrollToCell(selectedPosition);
-    // fix 360 浏览器 9.5.0.136 兼容性问题修复, 采用其他方式进行聚焦
-    // const column = columns[selectedPosition.idx];
-    // if (column.formatterOptions?.focusable) return; // Let the formatter handle focus
-    // focusSinkRef.current!.focus();
+
+    const focusable = columns[selectedPosition.idx]?.formatterOptions?.focusable;
+    if (
+      (typeof focusable === 'function' && focusable(rows[selectedPosition.rowIdx]))
+      || focusable === true
+    ) {
+      // Let the formatter handle focus
+      return;
+    }
+    focusSinkRef.current!.focus();
   });
 
   useEffect(() => {
@@ -390,7 +397,7 @@ function DataGrid<R, K extends keyof R, SR>({
       action: UpdateActions.CELL_UPDATE
     });
 
-    // closeEditor();
+    closeEditor();
   }
 
   function commitEditor2Changes() {
