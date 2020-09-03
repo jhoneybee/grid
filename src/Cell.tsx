@@ -1,5 +1,6 @@
 import React, { forwardRef, memo, useRef } from 'react';
 import clsx from 'clsx';
+import { isFunction } from 'lodash';
 
 import { CellRendererProps } from './types';
 import { wrapEvent } from './utils';
@@ -41,7 +42,12 @@ function Cell<R, SR>({
   );
 
   function selectCell(openEditor?: boolean) {
-    eventBus.dispatch('SELECT_CELL', { idx: column.idx, rowIdx }, openEditor);
+    const { selectCell: columnSelectCell = true } = column;
+    if (
+      columnSelectCell || (isFunction(columnSelectCell) && columnSelectCell(row))
+    ) {
+      eventBus.dispatch('SELECT_CELL', { idx: column.idx, rowIdx }, openEditor);
+    }
   }
 
   function handleClick() {
