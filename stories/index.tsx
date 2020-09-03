@@ -16,8 +16,8 @@ import CellNavigation from './demos/CellNavigation';
 import HeaderFilters from './demos/HeaderFilters';
 import ColumnsReordering from './demos/ColumnsReordering';
 import RowsReordering from './demos/RowsReordering';
-import LegacyGrouping from './demos/LegacyGrouping';
 import MultipleSort from './demos/MultipleSort';
+import Grouping from './demos/Grouping';
 
 storiesOf('Demos', module)
   .add('Common Features', () => <CommonFeatures />)
@@ -33,4 +33,4 @@ storiesOf('Demos', module)
   .add('Columns Reordering', () => <ColumnsReordering />)
   .add('Multiple Sorting', () => <MultipleSort />)
   .add('Rows Reordering', () => <RowsReordering />)
-  .add('Legacy Grouping', () => <LegacyGrouping />);
+  .add('Grouping', () => <Grouping />);
