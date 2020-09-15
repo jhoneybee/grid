@@ -42,10 +42,15 @@ function Cell<R, SR>({
   );
 
   function selectCell(openEditor?: boolean) {
-    const { selectCell: columnSelectCell = true } = column;
-    if (
-      columnSelectCell || (isFunction(columnSelectCell) && columnSelectCell(row))
-    ) {
+    const { selectCell: columnSelectCell = () => true } = column;
+    let isSelectCell = true;
+    if (isFunction(columnSelectCell)) {
+      isSelectCell = columnSelectCell(row);
+    } else {
+      isSelectCell = columnSelectCell;
+    }
+
+    if (isSelectCell) {
       eventBus.dispatch('SELECT_CELL', { idx: column.idx, rowIdx }, openEditor);
     }
   }

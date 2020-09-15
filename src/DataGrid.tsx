@@ -300,7 +300,6 @@ function DataGrid<R, K extends keyof R, SR>({
 
     if (isCellFocusable.current) {
       isCellFocusable.current = false;
-      return;
     }
     focusSinkRef.current!.focus();
   });
