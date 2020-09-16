@@ -1,6 +1,6 @@
 import { Column, CalculatedColumn, FormatterProps } from '../types';
 import { ToggleGroupFormatter } from '../formatters';
-// import { SELECT_COLUMN_KEY } from '../Columns';
+import { SELECT_COLUMN_KEY } from '../Columns';
 
 interface Metrics<R, SR> {
   rawColumns: readonly Column<R, SR>[];
@@ -55,31 +55,30 @@ export function getColumnMetrics<R, SR>(metrics: Metrics<R, SR>): ColumnMetrics<
     return column;
   });
 
-  // 兼容性问题
-  // columns.sort(({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
-  //   // Sort select column first:
-  //   if (aKey === SELECT_COLUMN_KEY) return -1;
-  //   if (bKey === SELECT_COLUMN_KEY) return 1;
+  columns.sort(({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
+    // Sort select column first:
+    if (aKey === SELECT_COLUMN_KEY) return -1;
+    if (bKey === SELECT_COLUMN_KEY) return 1;
 
-  //   // Sort grouped columns second, following the groupBy order:
-  //   if (rawGroupBy?.includes(aKey)) {
-  //     if (rawGroupBy.includes(bKey)) {
-  //       return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
-  //     }
-  //     return -1;
-  //   }
-  //   if (rawGroupBy?.includes(bKey)) return 1;
+    // Sort grouped columns second, following the groupBy order:
+    if (rawGroupBy?.includes(aKey)) {
+      if (rawGroupBy.includes(bKey)) {
+        return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
+      }
+      return -1;
+    }
+    if (rawGroupBy?.includes(bKey)) return 1;
 
-  //   // Sort frozen columns third:
-  //   if (frozenA) {
-  //     if (frozenB) return 0;
-  //     return -1;
-  //   }
-  //   if (frozenB) return 1;
+    // Sort frozen columns third:
+    if (frozenA) {
+      if (frozenB) return 0;
+      return -1;
+    }
+    if (frozenB) return 1;
 
-  //   // Sort other columns last:
-  //   return 0;
-  // });
+    // Sort other columns last:
+    return 0;
+  });
 
   const unallocatedWidth = metrics.viewportWidth - allocatedWidths;
   const unallocatedColumnWidth = Math.max(

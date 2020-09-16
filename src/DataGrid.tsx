@@ -302,8 +302,7 @@ function DataGrid<R, K extends keyof R, SR>({
       isCellFocusable.current = false;
     }
 
-    // 兼容性问题
-    // focusSinkRef.current!.focus();
+    focusSinkRef.current!.focus();
   });
 
   useEffect(() => {
