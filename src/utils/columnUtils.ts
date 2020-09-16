@@ -21,6 +21,23 @@ interface ColumnMetrics<TRow, TSummaryRow> {
   groupBy: readonly string[];
 }
 
+// 兼容对sort不支持的浏览器
+function sort<T>(array: Array<T>, compare: (a: T, b: T) => number) {
+  for (let i = 1; i < array.length; i += 1) {
+    let currentIndex: number = i;
+    while (currentIndex > 0) {
+      const nextIndex = currentIndex - 1;
+      const position = compare(array[currentIndex], array[nextIndex]);
+      if (position < 0) {
+        const swap = array[nextIndex];
+        array[nextIndex] = array[currentIndex];
+        array[currentIndex] = swap;
+      }
+      currentIndex = nextIndex;
+    }
+  }
+}
+
 export function getColumnMetrics<R, SR>(metrics: Metrics<R, SR>): ColumnMetrics<R, SR> {
   let left = 0;
   let totalWidth = 0;
@@ -55,7 +72,7 @@ export function getColumnMetrics<R, SR>(metrics: Metrics<R, SR>): ColumnMetrics<
     return column;
   });
 
-  columns.sort(({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
+  sort<IntermediateColumn>(columns, ({ key: aKey, frozen: frozenA }, { key: bKey, frozen: frozenB }) => {
     // Sort select column first:
     if (aKey === SELECT_COLUMN_KEY) return -1;
     if (bKey === SELECT_COLUMN_KEY) return 1;
