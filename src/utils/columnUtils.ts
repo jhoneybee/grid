@@ -21,7 +21,7 @@ interface ColumnMetrics<TRow, TSummaryRow> {
   groupBy: readonly string[];
 }
 
-// 兼容对sort不支持的浏览器
+// 修复sort的兼容性问题
 function sort<T>(array: Array<T>, compare: (a: T, b: T) => number) {
   for (let i = 1; i < array.length; i += 1) {
     let currentIndex: number = i;
@@ -32,8 +32,10 @@ function sort<T>(array: Array<T>, compare: (a: T, b: T) => number) {
         const swap = array[nextIndex];
         array[nextIndex] = array[currentIndex];
         array[currentIndex] = swap;
+        currentIndex = nextIndex;
+      } else {
+        break;
       }
-      currentIndex = nextIndex;
     }
   }
 }

@@ -1,4 +1,5 @@
-import { getColumnMetrics, getColumnScrollPosition, canEdit } from './columnUtils';
+import { getColumnMetrics, getColumnScrollPosition, canEdit, sort } from './columnUtils';
+import { isEqual } from 'lodash';
 import { ValueFormatter } from '../formatters';
 import { Column, CalculatedColumn } from '../types';
 import { createColumns } from '../test/utils';
@@ -127,6 +128,7 @@ describe('getColumnScrollPosition', () => {
   });
 });
 
+
 describe('canEdit', () => {
   interface Row {
     id: number;
@@ -163,4 +165,15 @@ describe('canEdit', () => {
     expect(canEdit({ ...column, editor, editable: false }, row)).toBe(true);
     expect(canEdit({ ...column, editor, editable: true }, row)).toBe(true);
   });
+});
+
+test('sort', () => {
+  const test: number [] = [1, 2, 1, 2, 34, 12, 122, 31, 23, 4, 5, 62, 123];
+
+  const testData: number[] = [1, 2, 1, 2, 34, 12, 122, 31, 23, 4, 5, 62, 123];
+
+  test.sort(() => -1);
+  sort<number>(testData, () => -1);
+
+  expect(isEqual(test, testData)).toBe(true);
 });
