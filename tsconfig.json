@@ -14,7 +14,7 @@
     "outDir": "lib",
     "pretty": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es5",
     "types": ["jest", "@testing-library/jest-dom"]
   },
   "files": [
